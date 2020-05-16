@@ -223,9 +223,6 @@ public class Globales {
     public static String OpcionInicio = "";
 
     public static String pagarcon = "";
-
-
-    public static boolean esServicioDeTaxi = false;
-
-
+    public static boolean recoger_en_tienda = false;
+    public static double deliveryTemporal = 0; //solo para cuando se hace el rojo en tienda
 }

@@ -126,7 +126,7 @@ public class PersonalizaPedidoActivity extends AppCompatActivity {
         GlideApp.with(PersonalizaPedidoActivity.this)
                 .load(urlImg)
                 .centerCrop()
-                .transform(new RoundedCornersTransformation(40,0))
+                .transform(new RoundedCornersTransformation(20,0))
                 .into(imgProducto);
 
         txtNameProducto.setText(Globales.productoPersonalizar.getDescripcion());

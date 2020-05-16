@@ -54,8 +54,17 @@ public class MetodoDePagoActivity extends AppCompatActivity {
         final CheckBox chbxYape = findViewById(R.id.chbxYape);
         final CheckBox chbxPlin = findViewById(R.id.chbxPlin);
         //final CheckBox chbxCodQR = (CheckBox) findViewById(R.id.chbxCodigoQR);
-
-
+        if(Globales.ciudadOrigen.equals("Huaraz"))
+        {
+            chbxEfectivo.setVisibility(View.GONE);
+            chbxYape.setVisibility(View.GONE);
+            chbxPlin.setVisibility(View.GONE);
+        }
+        else{
+            chbxEfectivo.setVisibility(View.VISIBLE);
+            chbxYape.setVisibility(View.VISIBLE);
+            chbxPlin.setVisibility(View.VISIBLE);
+        }
         chbxEfectivo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

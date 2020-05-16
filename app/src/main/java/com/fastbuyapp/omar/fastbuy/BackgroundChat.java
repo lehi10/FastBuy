@@ -113,7 +113,7 @@ public class BackgroundChat extends Service {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     notificador++;
-                    if(notificador > 1) {
+                    if(notificador > 2) {
                         FireBaseChat data = dataSnapshot.getValue(FireBaseChat.class);
                         String codusuario = data.getCodusuario();
                         String codigoRepartidor = data.getIdrepartidor();
@@ -191,7 +191,7 @@ public class BackgroundChat extends Service {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     notificador2++;
-                    if(notificador2 > 1) {
+                    if(notificador2 > 2) {
                         FireBasePromo prom = dataSnapshot.getValue(FireBasePromo.class);
                         String mensajePromo = prom.getMensaje();
                         String contenidoPromo = prom.getContenido();
@@ -293,7 +293,7 @@ public class BackgroundChat extends Service {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     notificador3++;
-                    if(notificador3 > 1) {
+                    if(notificador3 > 2) {
                         FireBaseCupon cup = dataSnapshot.getValue(FireBaseCupon.class);
                         String telefonousuario = cup.getTelefonousuario();
                         String codcupon = cup.getCodcupon();

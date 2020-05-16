@@ -62,6 +62,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.util.Formatter;
 
 //import java.util.Timer;
 //import java.util.TimerTask;
@@ -278,6 +279,10 @@ public class SiguiendoPedidoActivity extends AppCompatActivity {
         numPedido = getIntent().getStringExtra("pedido");
         //este me ayuda a saber si es la primera vez que pide o no
         cantidadRespuestas = Integer.valueOf(getIntent().getStringExtra("cantidadRespuestas"));
+        TextView txtNroPedido = (TextView) findViewById(R.id.txtNroPedido);
+
+        Formatter fmt = new Formatter();
+        txtNroPedido.setText("PEDIDO N° " + fmt.format("%06d", Integer.parseInt(numPedido)));
 
         //Inicializando Componentes
         animacion1 = (LottieAnimationView) findViewById(R.id.animationPendiente);

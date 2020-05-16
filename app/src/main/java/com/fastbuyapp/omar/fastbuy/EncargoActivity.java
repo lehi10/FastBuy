@@ -60,9 +60,7 @@ public class EncargoActivity extends AppCompatActivity {
 
         listCiu = new ArrayList<Ubicacion>();
         listCiu = Globales.listCiudades;
-
         LottieAnimationView btnBoxEncargo = (LottieAnimationView) findViewById(R.id.btnCajaAnimation);
-
         animacionEncargo = (LinearLayout) findViewById(R.id.linerAnimacionEncargo);
         generaEncargo = (LinearLayout) findViewById(R.id.linearGeneraEncargo);
 
@@ -70,7 +68,15 @@ public class EncargoActivity extends AppCompatActivity {
         animacionEncargo.setVisibility(View.VISIBLE);
         generaEncargo.setVisibility(View.GONE);
 
-        setToolbarConfig();
+        //Start Toolbar
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_navigate_before));
+        //End Toolbar
 
         //inicializando variables
         final TextView cmbCiudadEncargo = (TextView) findViewById(R.id.cmbCiudadEncargo);
@@ -282,11 +288,6 @@ public class EncargoActivity extends AppCompatActivity {
         //End Menú
     }
 
-
-
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -318,21 +319,5 @@ public class EncargoActivity extends AppCompatActivity {
         listaCiudadesEncargo.setNumColumns(1);
         adapter = new CiudadListAdapter(EncargoActivity.this, R.layout.list_ciudades_item, listCiu);
         listaCiudadesEncargo.setAdapter(adapter);
-    }
-
-
-
-
-
-    private void setToolbarConfig(){
-        //Start Toolbar
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_navigate_before));
-        //End Toolbar
     }
 }

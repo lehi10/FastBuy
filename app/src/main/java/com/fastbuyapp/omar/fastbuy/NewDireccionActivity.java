@@ -107,7 +107,6 @@ public class NewDireccionActivity extends FragmentActivity implements OnMapReady
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
         txtNewDirec = (EditText) findViewById(R.id.txtNameDireccion);
         //Combo box de las etiquetas
         final TextView cmbEtiqueta = (TextView) findViewById(R.id.cmbEtiqueta);
@@ -427,7 +426,7 @@ public class NewDireccionActivity extends FragmentActivity implements OnMapReady
         miCirculo(ubiCiudadMapa);
         LatLng miUbi = new LatLng(lat,lon);
         mLocManager.removeUpdates((LocationListener) Local);
-        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miUbi, 18));
         mMap.addMarker(new MarkerOptions()
                 .position(miUbi)
