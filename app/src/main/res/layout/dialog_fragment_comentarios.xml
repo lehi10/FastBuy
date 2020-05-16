@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="300dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:background="@drawable/cuadro_encargo"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginHorizontal="10dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_message_gray_24dp"
+                    />
+
+                <TextView
+                    android:id="@+id/txt_comentario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comentarios al conductor"
+                    android:maxLines="1"
+                    android:gravity="center"
+                    android:textColor="@color/humo6"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/layout_checkboxs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp"
+                >
+                <!--
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Más de 3 pasajeros"
+                    android:checked="true"
+                    android:textColor="@color/humo_gris"
+                    android:button="@drawable/boton_checkbox">
+                </CheckBox>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Menores de edad"
+                    android:textColor="@color/humo_gris"
+                    android:button="@drawable/boton_checkbox">
+                </CheckBox>
+                -->
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:layout_marginTop="15dp"
+                >
+
+
+                <Button
+                    android:id="@+id/button_enviar_comentarios"
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/boton_amarillo_2"
+                    android:text="Enviar"
+                    android:layout_marginRight="15dp"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
