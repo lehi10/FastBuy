@@ -72,7 +72,7 @@ public class FragmentSoporte extends Fragment {
                                                 txtTelefono.setText("");
                                                 txtLugar.setText("");
                                                 txtPedido.setText("");
-                                                Intent intent = new Intent(view.getContext(), Principal2Activity.class);
+                                                Intent intent = new Intent(view.getContext(), PrincipalActivity.class);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                 startActivity(intent);
                                             }

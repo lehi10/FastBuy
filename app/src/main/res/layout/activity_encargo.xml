@@ -112,7 +112,6 @@
                     android:textSize="15sp"
                     android:paddingHorizontal="40dp"/>
             </LinearLayout>
-
             <LinearLayout
                 android:id="@+id/linearFlotanteEncargo"
                 android:layout_width="match_parent"
@@ -137,7 +136,6 @@
                     android:layout_height="60dp"
                     android:background="@drawable/circulo_amarillo"/>
             </LinearLayout>
-
             <LinearLayout
                 android:id="@+id/linearGeneraEncargo"
                 android:layout_width="match_parent"

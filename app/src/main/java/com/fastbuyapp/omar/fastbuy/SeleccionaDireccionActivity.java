@@ -77,6 +77,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorCompletionService;
 
 public class SeleccionaDireccionActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
@@ -436,6 +437,15 @@ public class SeleccionaDireccionActivity extends FragmentActivity implements OnM
             //double costoEnvio = Math.round(delivery.calcularCostoEnvio(numeromayor)*Math.pow(10,2))/Math.pow(10,2);
             double costoEnvio = new BigDecimal(delivery.calcularCostoEnvio(numeromayor)).setScale(1, RoundingMode.HALF_UP).doubleValue();
             Globales.montoDelivery = costoEnvio;
+            Globales.deliveryTemporal = costoEnvio;
+
+            if(Globales.recoger_en_tienda == true){
+                Globales.montoDelivery = 0;
+            }
+            else{
+                Globales.montoDelivery = Globales.deliveryTemporal;
+                //costoEnvio = Globales.deliveryTemporal;
+            }
             Log.v("costoEnvio", String.format("%.2f",costoEnvio));
             //End logica para calcular el costo de envio
         }
@@ -687,7 +697,8 @@ public class SeleccionaDireccionActivity extends FragmentActivity implements OnM
                 mLocManager.removeUpdates((LocationListener) Local);
 
             miUbicacion(Double.parseDouble(LatitudSel), Double.parseDouble(LongitudSel));
-            progDailog.dismiss();
+            if(progDailog != null)
+                progDailog.dismiss();
             //this.seleccionaDireccionActivity.setLocation(loc);
         }
 
@@ -724,39 +735,47 @@ public class SeleccionaDireccionActivity extends FragmentActivity implements OnM
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        try{
+            mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(Double.parseDouble(LatitudSel), Double.parseDouble(LongitudSel));
-        /*mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));*/
-        /*mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        mMap.moveCamera(CameraUpdateFactory.zoomBy(25)); // newLatLngZoom(sydney, 25));*/
+            // Add a marker in Sydney and move the camera
+            //LatLng sydney = new LatLng(Double.parseDouble(LatitudSel), Double.parseDouble(LongitudSel));
+            /*mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));*/
+            /*mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            mMap.moveCamera(CameraUpdateFactory.zoomBy(25)); // newLatLngZoom(sydney, 25));*/
 
-        mMap.setOnMapClickListener(this);
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED) {
-            /*mMap.setMyLocationEnabled(true);
+            mMap.setOnMapClickListener(this);
+            if (ActivityCompat.checkSelfPermission(this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                /*mMap.setMyLocationEnabled(true);
 
-            mMap.setIndoorEnabled(false);
-            mMap.setBuildingsEnabled(false);
-            mMap.getUiSettings().setCompassEnabled(true);*/
-            mMap.getUiSettings().setCompassEnabled(true);
-            mMap.getUiSettings().setMapToolbarEnabled(false);
-            mMap.setMyLocationEnabled(false);
+                mMap.setIndoorEnabled(false);
+                mMap.setBuildingsEnabled(false);
+                mMap.getUiSettings().setCompassEnabled(true);*/
+                mMap.getUiSettings().setCompassEnabled(true);
+                mMap.getUiSettings().setMapToolbarEnabled(false);
+                mMap.setMyLocationEnabled(false);
+            }
+        } catch (Exception e) {
+
         }
     }
 
     public void ubicacionOriginal(View view) {
-        mMap.clear();
-        miCirculo(ubiCiudadMapa);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubiOrigin, 18));
-        mMap.addMarker(new MarkerOptions()
-                .position(ubiOrigin)
-                .title("Ubicación Actual")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-    }
+        try {
+            mMap.clear();
+            miCirculo(ubiCiudadMapa);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubiOrigin, 16));
+            mMap.addMarker(new MarkerOptions()
+                    .position(ubiOrigin)
+                    .title("Ubicación Actual")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
+        } catch (Exception e) {
+
+        }
+    }
     @Override public void onMapClick(LatLng puntoPulsado) {
         mMap.clear();
         miCirculo(ubiCiudadMapa);
@@ -768,18 +787,23 @@ public class SeleccionaDireccionActivity extends FragmentActivity implements OnM
     }
 
     public void miUbicacion(double lat, double lon){
-        mMap.clear();
-        miCirculo(ubiCiudadMapa);
-        LatLng miUbi = new LatLng(lat,lon);
-        mLocManager.removeUpdates((LocationListener) Local);
-        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miUbi, 18));
-        mMap.addMarker(new MarkerOptions()
-                .position(miUbi)
-                .title("Ubicación Actual")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        //mMap.moveCamera(CameraUpdateFactory.zoomBy(20));
-        /*mMap.moveCamera(CameraUpdateFactory.newLatLng(miUbi));*/
+        try {
+            mMap.clear();
+            miCirculo(ubiCiudadMapa);
+            LatLng miUbi = new LatLng(lat,lon);
+            mLocManager.removeUpdates((LocationListener) Local);
+            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miUbi, 16));
+            mMap.addMarker(new MarkerOptions()
+                    .position(miUbi)
+                    .title("Ubicación Actual")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            //mMap.moveCamera(CameraUpdateFactory.zoomBy(14));
+            /*mMap.moveCamera(CameraUpdateFactory.newLatLng(miUbi));*/
+        }
+        catch (Exception e){
+
+        }
     }
 
     public void miCirculo(LatLng x) {

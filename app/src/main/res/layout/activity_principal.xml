@@ -138,7 +138,7 @@
                                 app:srcCompat="@drawable/marketgif" />
 
                             <TextView
-                                android:text="MARKET"
+                                android:text="TIENDAS"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/textView9"
@@ -217,7 +217,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:weightSum="2"
-                        android:layout_marginBottom="10dp">
+                        android:layout_marginBottom="10dp"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:orientation="vertical"
@@ -235,7 +236,7 @@
                                 android:scaleType="fitXY" />
 
                             <TextView
-                                android:text="HOTELERÍA"
+                                android:text="TURISMO"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/textView11"

@@ -94,8 +94,6 @@ public class HistorialPedidosActivity extends AppCompatActivity {
 
         //listaHistorialPedidos(String.valueOf(numerito));
 
-
-
         //Menu
         ImageButton btnHome = (ImageButton) findViewById(R.id.btnHome);
         ImageButton btnFavoritos = (ImageButton) findViewById(R.id.btnFavoritos);
@@ -205,7 +203,7 @@ public class HistorialPedidosActivity extends AppCompatActivity {
                                 intent.putExtra("state",String.valueOf(state));
                                 intent.putExtra("empresa",list.get(position).getCodigoEmpresa());
                                 intent.putExtra("pedido",String.valueOf(list.get(position).getCodigo()));
-                                intent.putExtra("cantidadRespuestas","0");//cambiar a cero "1"
+                                intent.putExtra("cantidadRespuestas","1");//cambiar a cero "1"
                                 startActivity(intent);
                             }
                         });

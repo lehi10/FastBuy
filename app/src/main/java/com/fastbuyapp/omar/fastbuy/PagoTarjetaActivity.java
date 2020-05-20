@@ -20,6 +20,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -119,7 +121,7 @@ public class PagoTarjetaActivity extends AppCompatActivity {
                     String JSONString = data.getExtras().getString("keyError");
                     JSONString = JSONString != null ? JSONString : "";
                     Globales.mensajeVisa = JSONString;
-                    new PromptDialog(this)
+                    /*new PromptDialog(this)
                             .setDialogType(PromptDialog.DIALOG_TYPE_WRONG)
                             .setAnimationEnable(true)
                             .setTitleText("ERROR")
@@ -129,10 +131,14 @@ public class PagoTarjetaActivity extends AppCompatActivity {
                                 public void onClick(PromptDialog dialog) {
                                     dialog.dismiss();
                                 }
-                            }).show();
+                            }).show();*/
                     //actualizaCorrelativoVisa(codigoVisa);
                     Intent intent = new Intent(this, PagoExitosoVisaActivity.class);
                     intent.putExtra("estado", "false");
+                    intent.putExtra("state", "0");
+                    intent.putExtra("empresa", "");
+                    intent.putExtra("pedido", "");
+                    intent.putExtra("cantidadRespuestas", "0");
                     startActivity(intent);
                 }
             } else {
@@ -188,7 +194,6 @@ public class PagoTarjetaActivity extends AppCompatActivity {
     EditText etMontoPagoEfectivo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pago_tarjeta);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -291,11 +296,7 @@ public class PagoTarjetaActivity extends AppCompatActivity {
         //End Validar Tipo de pago
 
         //Start pop-up para seleccionar la direccion
-        if(Globales.esServicioDeTaxi == false){
-            abrirPopUp();
-
-        }
-        muestraTextos();
+        abrirPopUp();
         //End pop-up para seleccionar la direccion
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -303,15 +304,12 @@ public class PagoTarjetaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_chevron_left_black_24dp));
 
-
-
-
         //Start Boton Comprar
         btnGenerarCompra = (Button) findViewById(R.id.btnComprar);
         btnGenerarCompra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Globales.montoDelivery == 0.0){
+                if (Globales.deliveryTemporal == 0.0){
                     abrirPopUp();
                 }else{
                     btnGenerarCompra.setEnabled(false);
@@ -471,7 +469,6 @@ public class PagoTarjetaActivity extends AppCompatActivity {
         ImageButton btnFavoritos = (ImageButton) findViewById(R.id.btnFavoritos);
         ImageButton btnCarrito = (ImageButton) findViewById(R.id.btnCarrito);
         ImageButton btnUsuario = (ImageButton) findViewById(R.id.btnUsuario);
-
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -501,6 +498,32 @@ public class PagoTarjetaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(PagoTarjetaActivity.this, UserActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        CheckBox ckRecogerEnTienda = (CheckBox) findViewById(R.id.ckRecogerEnTienda);
+        ckRecogerEnTienda.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked){
+                    costoEnvio = 0;
+                    Globales.montoDelivery = 0;
+                    Globales.recoger_en_tienda = true;
+                }
+                else {
+                    Globales.montoDelivery = Globales.deliveryTemporal;
+                    costoEnvio = Globales.deliveryTemporal;
+                    Globales.recoger_en_tienda = false;
+                }
+                if (Globales.tipoPago == 2)
+                    cargo = visa.calcularCargoVisa(sumaTotal + costoEnvio - descuento);
+                else
+                    cargo = 0;
+                total = sumaTotal + cargo + costoEnvio - descuento;
+                Globales.montoCargo = cargo;
+                Globales.montoTotal = total;
+                muestraTextos();
             }
         });
     }
@@ -940,7 +963,6 @@ public class PagoTarjetaActivity extends AppCompatActivity {
                         //data.put(VisaNet.VISANET_AMOUNT, (Object) "0.50");//a modo de prueba
                         data.put(VisaNet.VISANET_END_POINT_URL, "https://apiprod.vnforapps.com/");
                         //Personalización (Ingreso opcional)
-
                         VisaNetViewAuthorizationCustom custom = new VisaNetViewAuthorizationCustom();
                         custom.setLogoTextMerchant(true);
                         custom.setLogoTextMerchantText("FASTBUY");
@@ -1022,7 +1044,8 @@ public class PagoTarjetaActivity extends AppCompatActivity {
         }
 
         String o = URLEncoder.encode(listaDetallada,"UTF-8");
-        String consulta = "https://apifbdelivery.fastbuych.com/Delivery/GuardarPedido2?auth="+Globales.tokencito+"&nombre="+a+"&direccion="+b+"&telefono=" + c +"&delivery=" + d +"&cargo=" + e +"&forma=" + f +"&tiempo=" + g+"&origen=" + h + "&latitud=" + i + "&longitud=" + j + "&pago=" + k + "&vuelto=" + l+ "&descuento=" + m +"&montoPedido=" + n+"&empresa=" + Globales.codEstablecimiento1+"&ubicacion=" + Globales.ubicaEstablecimiento1+"&detalle="+o;
+        String recoger = (Globales.recoger_en_tienda) ? "1" : "0";
+        String consulta = "https://apifbdelivery.fastbuych.com/Delivery/GuardarPedido2?auth="+Globales.tokencito+"&nombre="+a+"&direccion="+b+"&telefono=" + c +"&delivery=" + d +"&cargo=" + e +"&forma=" + f +"&tiempo=" + g+"&origen=" + h + "&latitud=" + i + "&longitud=" + j + "&pago=" + k + "&vuelto=" + l+ "&descuento=" + m +"&montoPedido=" + n+"&empresa=" + Globales.codEstablecimiento1+"&recoger=" + recoger +"&ubicacion=" + Globales.ubicaEstablecimiento1+"&detalle="+o;
         RegistrarPedidoBD(consulta,lista,String.valueOf(Globales.codEstablecimiento1), progreso);
 
     }
@@ -1039,6 +1062,7 @@ public class PagoTarjetaActivity extends AppCompatActivity {
                         JSONObject jo = new JSONObject(response);
                         codigoRegistro = jo.getInt("Codigo_Pedido");
                         final String cantidadRespuestas = jo.getString("Respuestas_Cantidad");
+                        String formapagopedidotemp = Globales.formaPago;
                         Log.v("encuesta",cantidadRespuestas);
                         //start añadido el 27-02-2020
                         laempresa = empresa;
@@ -1065,40 +1089,43 @@ public class PagoTarjetaActivity extends AppCompatActivity {
                         Globales.montoDescuento = 0;
                         Globales.tipoPago = 1;
                         Globales.formaPago = "Efectivo";
+                        Globales.deliveryTemporal = 0;
                         btnGenerarCompra.setEnabled(true);
 
                         Globales.listaPedidos.clear();
                         progreso.dismiss();
+                        if(formapagopedidotemp.equals("Tarjeta")) {
+                            Intent intent = new Intent(PagoTarjetaActivity.this, PagoExitosoVisaActivity.class);
+                            intent.putExtra("estado", "true");
+                            intent.putExtra("state", String.valueOf(0));
+                            intent.putExtra("empresa", laempresa);
+                            intent.putExtra("pedido", String.valueOf(codigoRegistro));
+                            intent.putExtra("cantidadRespuestas", cantidadRespuestas);
+                            startActivity(intent);
+                        }
+                        else {
+                            Globales.recoger_en_tienda = false;
+                            new PromptDialog(PagoTarjetaActivity.this)
+                                    .setDialogType(PromptDialog.DIALOG_TYPE_SUCCESS)
+                                    .setAnimationEnable(true)
+                                    .setTitleText("PEDIDO N°" +  codigoRegistro)
+                                    .setContentText("Su pedido fue generado con éxito.")
+                                    .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
+                                        @Override
+                                        public void onClick(PromptDialog dialog) {
+                                            dialog.dismiss();
+                                            Log.v("encuesta", cantidadRespuestas);
 
-                        Intent intent = new Intent(PagoTarjetaActivity.this, PagoExitosoVisaActivity.class);
-                        intent.putExtra("estado", "true");
-                        intent.putExtra("state",String.valueOf(0));
-                        intent.putExtra("empresa",laempresa);
-                        intent.putExtra("pedido",String.valueOf(codigoRegistro));
-                        intent.putExtra("cantidadRespuestas",cantidadRespuestas);
-                        startActivity(intent);
 
-                        /*new PromptDialog(PagoTarjetaActivity.this)
-                                .setDialogType(PromptDialog.DIALOG_TYPE_SUCCESS)
-                                .setAnimationEnable(true)
-                                .setTitleText("EXITO")
-                                .setContentText("Su pedido fue generado con éxito.")
-                                .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
-                                    @Override
-                                    public void onClick(PromptDialog dialog) {
-                                        dialog.dismiss();
-                                        Log.v("encuesta",cantidadRespuestas);
-
-
-
-                                        Intent intent = new Intent(PagoTarjetaActivity.this, SiguiendoPedidoActivity.class);
-                                        intent.putExtra("state",String.valueOf(0));
-                                        intent.putExtra("empresa",laempresa);
-                                        intent.putExtra("pedido",String.valueOf(codigoRegistro));
-                                        intent.putExtra("cantidadRespuestas",cantidadRespuestas);
-                                        startActivity(intent);
-                                    }
-                                }).show();*/
+                                            Intent intent = new Intent(PagoTarjetaActivity.this, SiguiendoPedidoActivity.class);
+                                            intent.putExtra("state", String.valueOf(0));
+                                            intent.putExtra("empresa", laempresa);
+                                            intent.putExtra("pedido", String.valueOf(codigoRegistro));
+                                            intent.putExtra("cantidadRespuestas", cantidadRespuestas);
+                                            startActivity(intent);
+                                        }
+                                    }).show();
+                        }
                         //End añadido el 27-02-2020
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -1332,18 +1359,8 @@ public class PagoTarjetaActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-
-        if(Globales.esServicioDeTaxi)
-        {
-            inicializaVariablesCupon();
-            Intent intent = new Intent(PagoTarjetaActivity.this,PrincipalActivity.class);
-            startActivity(intent);
-        }
-        else{
-            inicializaVariablesCupon();
-            Intent intent = new Intent(PagoTarjetaActivity.this,CarritoActivity.class);
-            startActivity(intent);
-        }
-
+        inicializaVariablesCupon();
+        Intent intent = new Intent(PagoTarjetaActivity.this,CarritoActivity.class);
+        startActivity(intent);
     }
 }

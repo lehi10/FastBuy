@@ -52,8 +52,6 @@
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 
     <string name="title_activity_maps">Direccion</string>
-    <string name="text_transporte">En Fastbuy nos preocupamoms por tu seguridad, por eso anñadimos nuestro servicio de Taxi ¡Pídelo ahora desde la app!</string>
-    <string name="text_descrip_transporte">Si necesitas un taxi seguro, accede  \n a uno desde nuestro servicio</string>
     <string-array name="ciudades">
         <item>Chepén</item>
         <item>Guadalupe</item>

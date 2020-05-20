@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                     //ubicacion.setLongitud(Globales.longitudOrigen);
                     ubicacion.setCheck(true);
                     db.guardarUsuario(usuario, "", LoginActivity.this);
-                    Intent intent2 = new Intent(LoginActivity.this,Principal2Activity.class);
+                    Intent intent2 = new Intent(LoginActivity.this,PrincipalActivity.class);
                     startActivity(intent2);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
