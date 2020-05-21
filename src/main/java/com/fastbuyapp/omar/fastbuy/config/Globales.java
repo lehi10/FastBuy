@@ -225,4 +225,5 @@ public class Globales {
     public static String pagarcon = "";
     public static boolean recoger_en_tienda = false;
     public static double deliveryTemporal = 0; //solo para cuando se hace el rojo en tienda
+    public static boolean esServicioDeTaxi = false;
 }
