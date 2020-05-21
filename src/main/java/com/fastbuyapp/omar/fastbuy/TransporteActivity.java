@@ -60,6 +60,8 @@ public class TransporteActivity extends AppCompatActivity  {
 
     public String idSpecificationSelected;
     public String textSpecificationSelected;
+    public double tariffAmount;
+    public String textTariffAmount;
 
 
 
@@ -127,7 +129,6 @@ public class TransporteActivity extends AppCompatActivity  {
                 // set message, title, and icon
                 .setTitle("Confirmación")
                 .setMessage("Confirma el perdido del Taxi")
-                .setIcon(R.drawable.payment_card_icon)
 
                 .setPositiveButton("Realizar el Pago", new DialogInterface.OnClickListener() {
 
@@ -137,7 +138,7 @@ public class TransporteActivity extends AppCompatActivity  {
                         Globales.montoDelivery = 0;
 
                         Globales.montoCargo = 0;
-                        Globales.montoCompra = 60;
+                        Globales.montoCompra =tariffAmount;
                         Globales.montoTotal = 0;
 
 
@@ -406,6 +407,12 @@ public class TransporteActivity extends AppCompatActivity  {
     public void setSpecificationsData(String idSpecification, String textStecification){
         idSpecificationSelected = idSpecification;
         textSpecificationSelected = textStecification;
+
+    }
+
+    public void setTariff(double tariff){
+        tariffAmount = tariff;
+        textTariffAmount = String.valueOf(tariff);
 
     }
 }

@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/negro"
-            android:text="S/ 150.00"
+            android:text="S/ 000.00"
             android:textStyle="bold"
             android:textSize="20sp"
             android:gravity="center_horizontal"/>
@@ -95,6 +95,7 @@
                     android:textColor="@color/azul"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/tarjetaInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"

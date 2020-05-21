@@ -22,6 +22,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
+        <activity android:name=".SiguiendoTransporteActivity"></activity>
+        <activity android:name=".ResumenTransporteActivity" />
+        <activity android:name=".PagoTransporteActivity" />
+        <activity android:name=".PendienteTaxiActivity" />
         <activity android:name=".TurismoActivity"></activity>
         <activity
             android:name=".EncuestaFastBuyActivity"

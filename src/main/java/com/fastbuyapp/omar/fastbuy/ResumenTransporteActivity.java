@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -18,6 +19,7 @@ public class ResumenTransporteActivity extends AppCompatActivity {
     TextView lblTitularVisa, lblNumOperacionVisa;
     Button btnCerrarResumen;
     LottieAnimationView animacion1, animacion2;
+    LinearLayout tarjetaInfo;
 
     String statePedido, empresaPedido, numPedido;
     int cantidadRespuestas;
@@ -30,6 +32,8 @@ public class ResumenTransporteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resumen_transporte);
+
+        tarjetaInfo = findViewById(R.id.tarjetaInfo);
 
         //inicializar componentes
         txtEstadoPago = findViewById(R.id.txtEstadoVisa);
@@ -48,7 +52,6 @@ public class ResumenTransporteActivity extends AppCompatActivity {
         animacion1 = findViewById(R.id.animationExitoso);
         animacion2 = findViewById(R.id.animationRechazado);
 
-
         Intent intent = getIntent();
 
         state = intent.getStringExtra("state");
@@ -57,6 +60,12 @@ public class ResumenTransporteActivity extends AppCompatActivity {
         total = Double.valueOf(intent.getStringExtra("total"));
         charge = Double.valueOf(intent.getStringExtra("charge"));
         subtotal = Double.valueOf(intent.getStringExtra("subtotal"));
+
+        tarjetaInfo.setVisibility(View.GONE);
+
+        txtImporteVisa1.setText(String.valueOf(total));
+        txtImporteVisa.setText(String.valueOf(total));
+        txtDescripcionVisa.setText("Servicio de Taxi");
 
 
 
@@ -72,8 +81,6 @@ public class ResumenTransporteActivity extends AppCompatActivity {
                 intent.putExtra("code_transp",code_transp);
 
                 startActivity(intent);
-
-
             }
         });
     }

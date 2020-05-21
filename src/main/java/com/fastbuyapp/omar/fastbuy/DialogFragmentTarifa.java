@@ -77,14 +77,14 @@ public class DialogFragmentTarifa extends DialogFragment {
         priceCalculated = 0.0;
         minPrice = 0.0;
 
-        double distance_in_m = get_distance_in_meters();
-        // Listeners for events when an option is clicked
+
         on_Click_enviar_tafifa();
-
-        priceCalculator();
-
         displayButtons();
 
+
+        double distance_in_m = get_distance_in_meters();
+
+        // Listeners for events when an option is clicked
         return rootView;
     }
 
@@ -92,6 +92,8 @@ public class DialogFragmentTarifa extends DialogFragment {
         button_Add.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+                priceCalculated += 0.5;
+                textView_tarifa.setText(String.valueOf(priceCalculated));
 
             }
         });
@@ -99,13 +101,25 @@ public class DialogFragmentTarifa extends DialogFragment {
         button_Reduce.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if( priceCalculated - 0.5 >= minPrice)
+                {
+                    priceCalculated-= 0.5;
+                    textView_tarifa.setText(String.valueOf(priceCalculated));
+                }
+                else{
+                    Toast.makeText(getContext(), "Se alcanzó el precio minimo", Toast.LENGTH_LONG).show();
+                }
 
             }
         });
 
     }
 
-    public void priceCalculator(){
+    public double roundToHalf(double x) {
+        return (double) (Math.ceil(x * 2) / 2);
+    }
+
+    public double priceCalculator(){
 
         String URL="https://apifbtransportes.fastbuych.com/Transporte/ubicacion_precios_taxi?auth="+ Globales.tokencito+"&codigo_ciudad="+String.valueOf(Globales.ubicacion);
         RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
@@ -123,16 +137,19 @@ public class DialogFragmentTarifa extends DialogFragment {
 
 
 
-                        Toast.makeText(getContext(), String.valueOf(distance_value/1000)+" "+String.valueOf(Globales.ubicacion), Toast.LENGTH_LONG).show();
+                        Log.i("Distance value", String.valueOf(distance_value)+"------------------------------------------------");
+                        // Toast.makeText(getContext(), String.valueOf( distance_value/1000)+" "+String.valueOf(Globales.ubicacion), Toast.LENGTH_LONG).show();
 
                         minPrice = min_pricei;
-                        priceCalculated=((distance_value/1000) * price_adicional)/distance_taxi;
+                        priceCalculated=(roundToHalf ((distance_value/1000) * price_adicional/distance_taxi));
 
                         if(priceCalculated <= minPrice) {
                             priceCalculated = min_pricei;
                         }
 
                         textView_tarifa.setText(String.valueOf(priceCalculated));
+
+
 
 
 
@@ -153,6 +170,9 @@ public class DialogFragmentTarifa extends DialogFragment {
         });
 
         queue.add(stringRequest);
+
+        return priceCalculated;
+
     }
 
 
@@ -163,6 +183,10 @@ public class DialogFragmentTarifa extends DialogFragment {
         button_enviar_tarifa.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                ((TransporteActivity)getActivity()).setTariff(priceCalculated);
+                ((TransporteActivity)getActivity()).textView_tarifa.setText(String.valueOf(priceCalculated));
+
                 getDialog().dismiss();
             }
         });
@@ -182,7 +206,6 @@ public class DialogFragmentTarifa extends DialogFragment {
         String str_lat_dest=Double.toString(lat_dest);
         String str_long_dest=Double.toString(long_dest);
 
-        final ProgressDialog dialogLoad = ProgressDialog.show(getActivity(), "Loading...", "Please wait...", true);
 
 
 
@@ -202,10 +225,13 @@ public class DialogFragmentTarifa extends DialogFragment {
                     distance_text    = distanceObject.getString("text");
                     // that regardless of what unit system is displayed as text, the distance.value field always contains a value expressed in meters. (Source: Official Google Maps Documentation )
                     distance_value   = distanceObject.getDouble("value");
+                    Log.i("VALUEE", distance_value + "------------------------------------------");
+
+                    double price_calc =priceCalculator();
 
                 } catch (JSONException e) {
                     //Toast.makeText(getContext(), "Ruta invalida ", Toast.LENGTH_LONG).show();
-                    dialogLoad.dismiss();
+
                     e.printStackTrace();
                     //dismiss();
                 }
@@ -213,7 +239,7 @@ public class DialogFragmentTarifa extends DialogFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                dialogLoad.dismiss();
+                Log.i("Error","Error");
             }
         });
 
