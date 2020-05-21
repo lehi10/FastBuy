@@ -390,6 +390,7 @@ public class NewDireccionActivity extends FragmentActivity implements OnMapReady
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         mMap.setOnMapClickListener(this);
         if (ActivityCompat.checkSelfPermission(this,
